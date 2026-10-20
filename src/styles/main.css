@@ -1,0 +1,133 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Palette source of truth: AGENTS.md "UI color palette" */
+:root, [data-theme='dark'] {
+  --color-bg-rgb: 15 17 23;            /* #0f1117 near black */
+  --color-surface-rgb: 26 28 36;        /* #1a1c24 dark gray */
+  --color-surface-light-rgb: 35 38 49;  /* #232631 */
+  --color-border-rgb: 42 44 52;         /* #2a2c34 charcoal */
+  --color-text-rgb: 240 240 242;        /* #f0f0f2 off-white */
+  --color-muted-rgb: 157 163 174;       /* #9da3ae */
+  --color-heading: #ffffff;
+  --glass-bg: rgba(26, 28, 36, 0.7);
+  --glass-border: rgba(42, 44, 52, 0.8);
+}
+
+[data-theme='light'] {
+  --color-bg-rgb: 255 255 255;          /* #ffffff white */
+  --color-surface-rgb: 245 245 247;     /* #f5f5f7 light gray */
+  --color-surface-light-rgb: 255 255 255;
+  --color-border-rgb: 226 228 234;      /* #e2e4ea subtle border */
+  --color-text-rgb: 68 71 91;           /* #44475b slate */
+  --color-muted-rgb: 100 116 139;       /* #64748b */
+  --color-heading: #1e2029;             /* dark slate for headings */
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(226, 228, 234, 0.85);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  }
+
+  body {
+    @apply bg-brand-dark text-brand-light antialiased selection:bg-brand-accent/30 selection:text-white transition-colors duration-150;
+  }
+}
+
+@layer utilities {
+  .gradient-text {
+    background: linear-gradient(135deg, #06d896 0%, #04b488 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .gradient-text-subtle {
+    background: linear-gradient(135deg, #ffffff 0%, #9da3ae 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .glass-card {
+    background-color: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+  }
+
+  .glass-card-hover {
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .glass-card-hover:hover {
+    border-color: rgba(6, 216, 150, 0.35);
+    transform: translateY(-2px);
+  }
+}
+
+/* Theme Toggle Component Styles */
+.theme-toggle {
+  position: relative;
+  flex-shrink: 0;
+  width: 56px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  background: #2b2f3a;
+  transition: background 0.2s;
+}
+.theme-toggle[aria-checked='false'] {
+  background: #cfd3e6;
+}
+.theme-toggle-icon {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 14px;
+  height: 14px;
+}
+.theme-toggle-icon-moon {
+  left: 6px;
+  color: #cfd8dc;
+}
+.theme-toggle-icon-sun {
+  right: 6px;
+  color: #fdd835;
+}
+.theme-toggle-knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  transition: transform 0.2s;
+}
+.theme-toggle[aria-checked='true'] .theme-toggle-knob {
+  transform: translateX(28px);
+}
+
+/* Light Mode Overrides */
+[data-theme='light'] .text-white {
+  color: var(--color-heading);
+}
+
+.text-brand-dark {
+  color: #1a1c24 !important;
+}
+
+[data-theme='light'] .glass-card {
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.04);
+}
+
+[data-theme='light'] .gradient-text-subtle {
+  background: linear-gradient(135deg, #1e2029 0%, #64748b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}

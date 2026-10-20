@@ -1,0 +1,78 @@
+export function RiskDisclosurePage() {
+  return (
+    <div class="py-16 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
+      <div class="mb-10">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-semibold uppercase tracking-wider mb-3">
+          Regulatory Compliance
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+          Risk Disclosure on Derivatives & Trading
+        </h1>
+        <p class="mt-3 text-sm text-brand-muted">
+          Last Updated: October 2026 &bull; Mandatory disclosure for Indian market participants
+        </p>
+      </div>
+
+      <div class="space-y-8 text-sm leading-relaxed text-brand-muted">
+        {/* SEBI Mandated Box */}
+        <div class="bg-red-500/10 border-2 border-red-500/30 rounded-2xl p-6 sm:p-8 text-white">
+          <h2 class="text-lg font-bold text-red-400 mb-3 flex items-center gap-2">
+            <span>&#9888;</span>
+            <span>SEBI Mandated Risk Disclosure for Derivatives (F&amp;O)</span>
+          </h2>
+          <ul class="space-y-3 text-sm text-brand-light">
+            <li class="flex items-start gap-2">
+              <span class="text-red-400 font-bold">&bull;</span>
+              <span><strong>9 out of 10 individual traders</strong> in equity Futures and Options (F&amp;O) segment incurred net losses based on SEBI study findings.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-red-400 font-bold">&bull;</span>
+              <span>On an average, loss-makers registered net trading loss close to <strong>₹50,000</strong> per person.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-red-400 font-bold">&bull;</span>
+              <span>Over and above net trading losses, loss-makers incurred an additional <strong>28% of net trading losses</strong> as transaction costs (brokerage, exchange turnover fees, STT, GST, and stamp duties).</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-red-400 font-bold">&bull;</span>
+              <span>Those making net trading profits also incurred between 15% to 50% of their gains as transaction costs.</span>
+            </li>
+          </ul>
+        </div>
+
+        <section class="bg-brand-surface border border-brand-border rounded-xl p-6 space-y-4">
+          <h2 class="text-xl font-bold text-white">1. Nature of the EnvoyTrade Service</h2>
+          <p>
+            EnvoyTrade is strictly a <strong>software technology automation platform</strong> that provides private cloud bridging and order routing through official broker APIs. EnvoyTrade is NOT registered with the Securities and Exchange Board of India (SEBI) as an Investment Adviser (IA), Research Analyst (RA), Portfolio Management Service (PMS), or Stock Broker.
+          </p>
+          <p>
+            EnvoyTrade does not provide financial advice, trading signals, stock recommendations, or portfolio allocation strategies. All trades replicated across your connected accounts originate solely from your chosen master account.
+          </p>
+        </section>
+
+        <section class="bg-brand-surface border border-brand-border rounded-xl p-6 space-y-4">
+          <h2 class="text-xl font-bold text-white">2. Technology, Network, and Latency Risks</h2>
+          <p>
+            While EnvoyTrade is engineered with sub-300ms fan-out targets, automated trade replication relies on complex multi-tiered networks:
+          </p>
+          <ul class="list-disc list-inside space-y-2 text-xs">
+            <li><strong>Broker API Availability:</strong> Brokerage endpoints (e.g. Kite Connect, SmartAPI) may experience intermittent downtime, rate limits, or latency spikes during volatile market open/close windows.</li>
+            <li><strong>Execution Slippage:</strong> Market orders placed on child accounts execute at prevailing exchange bid-ask prices, which may diverge from the master execution price due to order book depth and exchange queueing.</li>
+            <li><strong>Broker Margin &amp; RMS Rules:</strong> Follower orders may be rejected by the respective broker due to inadequate cash margin, collateral valuation haircut, freeze limits, or RMS risk filters.</li>
+            <li><strong>Exchange Connectivity:</strong> Telecommunication disruptions, internet downtime, or cloud host maintenance may impact trade replication.</li>
+          </ul>
+        </section>
+
+        <section class="bg-brand-surface border border-brand-border rounded-xl p-6 space-y-4">
+          <h2 class="text-xl font-bold text-white">3. User Responsibility &amp; Capital Allocation</h2>
+          <p>
+            You are exclusively responsible for assessing the financial risk associated with trading derivatives and ensuring that adequate margins are maintained on all follower accounts. You should never trade with capital you cannot afford to lose.
+          </p>
+          <p>
+            You acknowledge that EnvoyTrade holds no responsibility or liability for monetary losses, missed opportunities, slippage, or trading outcomes resulting from software execution, broker API rejections, or network outages.
+          </p>
+        </section>
+      </div>
+    </div>
+  )
+}
