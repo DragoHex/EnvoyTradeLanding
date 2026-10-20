@@ -72,8 +72,8 @@ export function HomePage() {
               <div class="text-xs sm:text-sm text-brand-muted mt-1 font-medium">Child Accounts</div>
             </div>
             <div class="p-4 rounded-xl bg-brand-surface/40 border border-brand-border/60">
-              <div class="text-3xl sm:text-4xl font-extrabold text-brand-accent">1</div>
-              <div class="text-xs sm:text-sm text-brand-muted mt-1 font-medium">Supported Broker</div>
+              <div class="text-3xl sm:text-4xl font-extrabold text-brand-accent">7</div>
+              <div class="text-xs sm:text-sm text-brand-muted mt-1 font-medium">Supported Brokers</div>
             </div>
             <div class="p-4 rounded-xl bg-brand-surface/40 border border-brand-border/60">
               <div class="text-3xl sm:text-4xl font-extrabold text-brand-accent">₹25Cr+</div>
