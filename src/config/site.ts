@@ -2,7 +2,7 @@ export const SITE_CONFIG = {
   name: 'EnvoyTrade',
   tagline: 'Fast Trade Copier for Indian Brokers',
   description: 'Copy trades from one master account to child accounts across Zerodha, Angel One, FYERS, Dhan, and Upstox with sub-300ms latency, flexible lot multipliers, and dedicated static IP.',
-  loginUrl: 'https://app.envoytrade.in/login',
+  loginUrl: 'https://mime.envoytrade.in/login',
   whatsappUrl: 'https://wa.me/919549156751',
   phone: '+91-9549156751',
   email: 'myenvoytrade@gmail.com',

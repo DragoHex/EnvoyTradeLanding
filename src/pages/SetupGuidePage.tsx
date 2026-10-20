@@ -23,7 +23,7 @@ export function SetupGuidePage() {
               </p>
               <ul class="list-disc list-inside space-y-1 text-brand-light">
                 <li>App Name: <code class="text-brand-accent">EnvoyTrade Copier</code></li>
-                <li>Redirect URL: <code class="text-brand-light">https://app.envoytrade.in/login/callback</code></li>
+                <li>Redirect URL: <code class="text-brand-light">https://mime.envoytrade.in/login/callback</code></li>
                 <li>Save your <code class="text-brand-accent">api_key</code> and <code class="text-brand-accent">api_secret</code></li>
               </ul>
             </div>
@@ -102,7 +102,7 @@ export function SetupGuidePage() {
       content: (
         <div class="space-y-4 text-sm text-brand-muted leading-relaxed">
           <p>
-            Log in to the dashboard at <a href={SITE_CONFIG.loginUrl} class="text-brand-accent hover:underline">app.envoytrade.in</a> to register your master and child trading accounts.
+            Log in to the dashboard at <a href={SITE_CONFIG.loginUrl} class="text-brand-accent hover:underline">mime.envoytrade.in</a> to register your master and child trading accounts.
           </p>
           <div class="grid sm:grid-cols-2 gap-4 text-xs">
             <div class="p-4 rounded-xl bg-brand-dark border border-brand-border">
