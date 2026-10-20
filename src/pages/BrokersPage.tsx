@@ -1,3 +1,4 @@
+import { Show } from 'solid-js'
 import {
   KiteLogo,
   AngelOneLogo,
@@ -171,15 +172,17 @@ export function BrokersPage() {
 
             <div class="mt-6 pt-4 border-t border-brand-border flex items-center justify-between">
               <span class="text-xs text-brand-muted">Includes Dedicated Static IP</span>
-              <a
-                href={SITE_CONFIG.whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="text-xs font-semibold text-brand-accent hover:text-brand-accent-hover inline-flex items-center gap-1.5"
-              >
-                <WhatsAppIcon size={13} />
-                <span>Connect {b.name.split(' ')[0]} &rarr;</span>
-              </a>
+              <Show when={b.status !== 'Live & Active'}>
+                <a
+                  href={SITE_CONFIG.whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-xs font-semibold text-brand-accent hover:text-brand-accent-hover inline-flex items-center gap-1.5"
+                >
+                  <WhatsAppIcon size={13} />
+                  <span>Connect {b.name.split(' ')[0]} &rarr;</span>
+                </a>
+              </Show>
             </div>
           </div>
         ))}
