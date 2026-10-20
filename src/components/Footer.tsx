@@ -1,6 +1,6 @@
 import { EnvoyLogo } from './EnvoyLogo'
 import { WhatsAppIcon } from './WhatsAppIcon'
-import { SITE_CONFIG, getRelativePath } from '../config/site'
+import { SITE_CONFIG, getRelativePath, isHomePage, isCurrentPage } from '../config/site'
 
 export interface FooterProps {
   isSubpage?: boolean
@@ -9,13 +9,54 @@ export interface FooterProps {
 export function Footer(props: FooterProps) {
   const isSub = () => props.isSubpage ?? false
 
+  const handleLinkClick = (e: MouseEvent, target: string) => {
+    const isHome = isHomePage()
+
+    if (target.startsWith('#')) {
+      if (isHome) {
+        e.preventDefault()
+        const id = target.replace('#', '')
+        const el = document.getElementById(id)
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' })
+          try {
+            history.replaceState(null, '', target)
+          } catch {}
+        }
+        return
+      }
+      return
+    }
+
+    if (target === '') {
+      if (isHome) {
+        e.preventDefault()
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+        try {
+          history.replaceState(null, '', window.location.pathname)
+        } catch {}
+        return
+      }
+    }
+
+    if (isCurrentPage(target)) {
+      e.preventDefault()
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+      return
+    }
+  }
+
   return (
     <footer id="footer" class="border-t border-brand-border bg-brand-surface/40 pt-16 pb-12 text-sm text-brand-muted">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
           {/* Brand info */}
           <div class="md:col-span-1 space-y-4">
-            <a href={getRelativePath('', isSub())} class="flex items-center gap-2.5">
+            <a
+              href={getRelativePath('', isSub())}
+              onClick={(e) => handleLinkClick(e, '')}
+              class="flex items-center gap-2.5 cursor-pointer"
+            >
               <EnvoyLogo size={26} />
               <span class="text-lg font-bold text-white tracking-tight">{SITE_CONFIG.name}</span>
             </a>
@@ -65,13 +106,13 @@ export function Footer(props: FooterProps) {
           <div>
             <h4 class="text-xs font-semibold uppercase tracking-wider text-white mb-4">Platform</h4>
             <ul class="space-y-2.5">
-              <li><a href={getRelativePath('#features', isSub())} class="hover:text-brand-accent transition">Features</a></li>
-              <li><a href={getRelativePath('#brokers', isSub())} class="hover:text-brand-accent transition">Broker Matrix</a></li>
-              <li><a href={getRelativePath('#how', isSub())} class="hover:text-brand-accent transition">How it Works</a></li>
-              <li><a href={getRelativePath('setup-guide/', isSub())} class="hover:text-brand-accent transition">Setup Guide</a></li>
-              <li><a href={getRelativePath('docs/', isSub())} class="hover:text-brand-accent transition">Documentation</a></li>
-              <li><a href={getRelativePath('#pricing', isSub())} class="hover:text-brand-accent transition">Pricing Plans</a></li>
-              <li><a href={getRelativePath('#faq', isSub())} class="hover:text-brand-accent transition">FAQ</a></li>
+              <li><a href={getRelativePath('#features', isSub())} onClick={(e) => handleLinkClick(e, '#features')} class="hover:text-brand-accent transition cursor-pointer">Features</a></li>
+              <li><a href={getRelativePath('#brokers', isSub())} onClick={(e) => handleLinkClick(e, '#brokers')} class="hover:text-brand-accent transition cursor-pointer">Broker Matrix</a></li>
+              <li><a href={getRelativePath('#how', isSub())} onClick={(e) => handleLinkClick(e, '#how')} class="hover:text-brand-accent transition cursor-pointer">How it Works</a></li>
+              <li><a href={getRelativePath('setup-guide/', isSub())} onClick={(e) => handleLinkClick(e, 'setup-guide/')} class="hover:text-brand-accent transition cursor-pointer">Setup Guide</a></li>
+              <li><a href={getRelativePath('docs/', isSub())} onClick={(e) => handleLinkClick(e, 'docs/')} class="hover:text-brand-accent transition cursor-pointer">Documentation</a></li>
+              <li><a href={getRelativePath('#pricing', isSub())} onClick={(e) => handleLinkClick(e, '#pricing')} class="hover:text-brand-accent transition cursor-pointer">Pricing Plans</a></li>
+              <li><a href={getRelativePath('#faq', isSub())} onClick={(e) => handleLinkClick(e, '#faq')} class="hover:text-brand-accent transition cursor-pointer">FAQ</a></li>
             </ul>
           </div>
 

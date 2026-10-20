@@ -26,14 +26,51 @@ export const SITE_CONFIG = {
 }
 
 /**
+ * Checks whether the user is currently on the home page.
+ */
+export function isHomePage(): boolean {
+  if (typeof window === 'undefined') return true
+  const path = window.location.pathname.replace(/\/+$/, '')
+  if (window.location.hostname.endsWith('github.io')) {
+    const parts = path.split('/').filter(Boolean)
+    return parts.length <= 1 // root or /EnvoyTradeLanding
+  }
+  return path === '' || path === '/index.html'
+}
+
+/**
+ * Checks whether the current page already matches the target link.
+ */
+export function isCurrentPage(target: string): boolean {
+  if (typeof window === 'undefined') return false
+  const path = window.location.pathname.replace(/\/+$/, '')
+  const clean = target.replace(/^\/+/, '').replace(/\/+$/, '')
+
+  // Target is home
+  if (clean === '') {
+    return isHomePage()
+  }
+
+  // Target is anchor on home page
+  if (clean.startsWith('#')) {
+    return isHomePage()
+  }
+
+  // Target is a subpage (e.g. 'docs', 'brokers', 'setup-guide')
+  return path.endsWith('/' + clean) || path === '/' + clean
+}
+
+/**
  * Returns a bulletproof URL that works seamlessly whether
  * hosted at domain root, on a GitHub Pages repo subpath, viewed locally,
  * or served through static file servers.
  */
-export function getRelativePath(target: string, isSubpage: boolean): string {
+export function getRelativePath(target: string, isSubpage?: boolean): string {
   if (target.startsWith('http://') || target.startsWith('https://') || target.startsWith('mailto:')) {
     return target
   }
+
+  const sub = isSubpage !== undefined ? isSubpage : !isHomePage()
 
   let basePrefix = ''
   if (typeof window !== 'undefined' && window.location.hostname.endsWith('github.io')) {
@@ -52,7 +89,7 @@ export function getRelativePath(target: string, isSubpage: boolean): string {
 
   // Anchor target on same page or across pages
   if (clean.startsWith('#')) {
-    if (!isSubpage) {
+    if (!sub) {
       return clean
     } else {
       return basePrefix ? `${basePrefix}/${clean}` : `/${clean}`

@@ -4,7 +4,7 @@ import { BrokersPage } from '../pages/BrokersPage'
 import '../styles/main.css'
 
 render(() => (
-  <Layout>
+  <Layout isSubpage={true}>
     <BrokersPage />
   </Layout>
 ), document.getElementById('root')!)

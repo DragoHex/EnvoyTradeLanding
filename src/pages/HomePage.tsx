@@ -1,4 +1,4 @@
-import { createSignal } from 'solid-js'
+import { createSignal, onMount } from 'solid-js'
 import { SITE_CONFIG, getRelativePath } from '../config/site'
 import { PricingCard } from '../components/PricingCard'
 import { KiteLogo, AngelOneLogo, FyersLogo, DhanLogo, UpstoxLogo } from '../components/BrokerLogo'
@@ -7,6 +7,18 @@ import { WhatsAppIcon } from '../components/WhatsAppIcon'
 
 export function HomePage() {
   const [brokersModalOpen, setBrokersModalOpen] = createSignal(false)
+
+  onMount(() => {
+    if (typeof window !== 'undefined' && window.location.hash) {
+      const id = window.location.hash.substring(1)
+      const el = document.getElementById(id)
+      if (el) {
+        setTimeout(() => {
+          el.scrollIntoView({ behavior: 'smooth' })
+        }, 100)
+      }
+    }
+  })
 
   return (
     <div>

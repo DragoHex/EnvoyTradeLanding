@@ -2,7 +2,7 @@ import { createSignal } from 'solid-js'
 import { EnvoyLogo } from './EnvoyLogo'
 import { ThemeToggle } from './ThemeToggle'
 import { useTheme } from '../context/theme'
-import { SITE_CONFIG, getRelativePath } from '../config/site'
+import { SITE_CONFIG, getRelativePath, isHomePage, isCurrentPage } from '../config/site'
 
 export interface NavbarProps {
   isSubpage?: boolean
@@ -13,12 +13,62 @@ export function Navbar(props: NavbarProps) {
   const isSub = () => props.isSubpage ?? false
   const { isDark, toggleTheme } = useTheme()
 
+  const handleLinkClick = (e: MouseEvent, target: string) => {
+    const isHome = isHomePage()
+
+    // 1. Anchor targets (e.g. #features, #how, #pricing, #faq, #contact-support)
+    if (target.startsWith('#')) {
+      if (isHome) {
+        // Already on home page: smooth scroll to element without page reload
+        e.preventDefault()
+        const id = target.replace('#', '')
+        const el = document.getElementById(id)
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' })
+          try {
+            history.replaceState(null, '', target)
+          } catch {}
+        }
+        setMobileMenuOpen(false)
+        return
+      }
+      // On another page: let the browser navigate normally to the home page URL with anchor
+      setMobileMenuOpen(false)
+      return
+    }
+
+    // 2. Logo / Home link
+    if (target === '') {
+      if (isHome) {
+        e.preventDefault()
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+        try {
+          history.replaceState(null, '', window.location.pathname)
+        } catch {}
+        setMobileMenuOpen(false)
+        return
+      }
+    }
+
+    // 3. Subpage links (e.g. docs/, brokers/)
+    if (isCurrentPage(target)) {
+      // Already on this page: smooth scroll to top, prevent reload & flicker
+      e.preventDefault()
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+      setMobileMenuOpen(false)
+      return
+    }
+
+    setMobileMenuOpen(false)
+  }
+
   return (
     <header class="fixed top-0 left-0 right-0 w-full bg-brand-dark/85 backdrop-blur-md border-b border-brand-border/80 z-50 transition-colors">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Brand logo & text link back to Home */}
         <a
           href={getRelativePath('', isSub())}
+          onClick={(e) => handleLinkClick(e, '')}
           class="flex items-center gap-3 group focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent rounded-lg p-1"
           title="EnvoyTrade - Return to Home"
         >
@@ -33,7 +83,8 @@ export function Navbar(props: NavbarProps) {
           {SITE_CONFIG.navLinks.map((link) => (
             <a
               href={getRelativePath(link.target, isSub())}
-              class="hover:text-brand-accent-hover hover:scale-105 transition duration-150 ease-out"
+              onClick={(e) => handleLinkClick(e, link.target)}
+              class="hover:text-brand-accent-hover hover:scale-105 transition duration-150 ease-out cursor-pointer"
             >
               {link.label}
             </a>
@@ -86,12 +137,8 @@ export function Navbar(props: NavbarProps) {
         {SITE_CONFIG.navLinks.map((link) => (
           <a
             href={getRelativePath(link.target, isSub())}
-            onClick={() => {
-              if (link.target.startsWith('#') && !isSub()) {
-                setMobileMenuOpen(false)
-              }
-            }}
-            class="block px-3 py-2 rounded-md text-base font-medium text-brand-light hover:text-brand-accent hover:bg-brand-dark/50"
+            onClick={(e) => handleLinkClick(e, link.target)}
+            class="block px-3 py-2 rounded-md text-base font-medium text-brand-light hover:text-brand-accent hover:bg-brand-dark/50 cursor-pointer"
           >
             {link.label}
           </a>
