@@ -102,7 +102,7 @@ export function SetupGuidePage() {
       content: (
         <div class="space-y-4 text-sm text-brand-muted leading-relaxed">
           <p>
-            Log in to the dashboard at <a href={SITE_CONFIG.loginUrl} class="text-brand-accent hover:underline">mime.envoytrade.in</a> to register your master and child trading accounts.
+            Log in to the dashboard at <a href={SITE_CONFIG.loginUrl} target="_blank" rel="noopener noreferrer" class="text-brand-accent hover:underline">mime.envoytrade.in</a> to register your master and child trading accounts.
           </p>
           <div class="grid sm:grid-cols-2 gap-4 text-xs">
             <div class="p-4 rounded-xl bg-brand-dark border border-brand-border">
