@@ -64,13 +64,13 @@ export function DocsPage() {
         <button
           type="button"
           onClick={() => setMobileIndexOpen(!mobileIndexOpen())}
-          class="w-full flex items-center justify-between py-2 px-3.5 rounded-xl bg-brand-dark/90 border border-brand-border text-xs font-medium text-brand-light hover:border-brand-accent/40 transition"
+          class="w-full flex items-center justify-between py-2 px-3.5 rounded-xl bg-brand-surface border border-brand-border text-xs font-medium text-brand-light hover:border-brand-accent/40 transition"
           aria-expanded={mobileIndexOpen()}
         >
           <span class="flex items-center gap-2 truncate">
             <span class="text-brand-accent font-mono font-bold">#</span>
             <span class="text-brand-muted">Section:</span>
-            <span class="text-white font-semibold truncate">{currentTitle()}</span>
+            <span class="text-brand-light font-semibold truncate">{currentTitle()}</span>
           </span>
           <svg
             class={`w-4 h-4 text-brand-accent shrink-0 transition-transform duration-200 ${mobileIndexOpen() ? 'rotate-180' : ''}`}
@@ -84,7 +84,7 @@ export function DocsPage() {
 
         {/* Collapsible Mobile Dropdown Panel */}
         <Show when={mobileIndexOpen()}>
-          <div class="mt-2 py-2 max-h-72 overflow-y-auto bg-brand-dark/98 border border-brand-border rounded-xl shadow-2xl divide-y divide-brand-border/40 animate-fade-in">
+          <div class="mt-2 py-2 max-h-72 overflow-y-auto bg-brand-surface border border-brand-border rounded-xl shadow-2xl divide-y divide-brand-border/40 animate-fade-in">
             <For each={sections}>
               {(section) => (
                 <button
@@ -93,7 +93,7 @@ export function DocsPage() {
                   class={`w-full text-left px-4 py-2.5 text-xs flex items-center justify-between transition ${
                     activeSection() === section.id
                       ? 'bg-brand-accent/10 text-brand-accent font-semibold'
-                      : 'text-brand-light hover:bg-brand-surface hover:text-white'
+                      : 'text-brand-muted hover:bg-brand-surface hover:text-brand-light'
                   }`}
                 >
                   <span>{section.title}</span>
@@ -127,11 +127,11 @@ export function DocsPage() {
                     class={`w-full text-left px-3 py-2 rounded-lg text-xs font-medium transition flex items-center justify-between group ${
                       activeSection() === section.id
                         ? 'bg-brand-accent/10 text-brand-accent border-l-2 border-brand-accent font-semibold'
-                        : 'text-brand-muted hover:text-white hover:bg-brand-surface'
+                        : 'text-brand-muted hover:text-brand-light hover:bg-brand-surface'
                     }`}
                   >
                     <span class="truncate">{section.title}</span>
-                    <span class="text-[9px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-brand-dark/70 text-brand-muted group-hover:text-brand-light">
+                    <span class="text-[9px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-brand-dark/50 border border-brand-border/50 text-brand-muted group-hover:text-brand-light">
                       {section.category}
                     </span>
                   </button>
