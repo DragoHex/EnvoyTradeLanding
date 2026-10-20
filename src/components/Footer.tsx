@@ -1,6 +1,6 @@
 import { EnvoyLogo } from './EnvoyLogo'
 import { WhatsAppIcon } from './WhatsAppIcon'
-import { SITE_CONFIG, getRelativePath, isHomePage, isCurrentPage } from '../config/site'
+import { SITE_CONFIG, getRelativePath, isCurrentPage } from '../config/site'
 
 export interface FooterProps {
   isSubpage?: boolean
@@ -10,8 +10,26 @@ export function Footer(props: FooterProps) {
   const isSub = () => props.isSubpage ?? false
 
   const handleLinkClick = (e: MouseEvent, target: string) => {
-    const isHome = isHomePage()
+    const isHome = !isSub()
 
+    // 1. Logo / Home link
+    if (target === '') {
+      if (isHome) {
+        // Already on home page: smooth scroll to top, zero reload
+        e.preventDefault()
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+        try {
+          history.replaceState(null, '', window.location.pathname)
+        } catch {}
+        return
+      }
+      // On a subpage: navigate cleanly back to home page
+      e.preventDefault()
+      window.location.href = getRelativePath('', true)
+      return
+    }
+
+    // 2. Anchor targets on home page
     if (target.startsWith('#')) {
       if (isHome) {
         e.preventDefault()
@@ -25,20 +43,13 @@ export function Footer(props: FooterProps) {
         }
         return
       }
+      // On another page: navigate cleanly to the home page URL with anchor
+      e.preventDefault()
+      window.location.href = getRelativePath(target, true)
       return
     }
 
-    if (target === '') {
-      if (isHome) {
-        e.preventDefault()
-        window.scrollTo({ top: 0, behavior: 'smooth' })
-        try {
-          history.replaceState(null, '', window.location.pathname)
-        } catch {}
-        return
-      }
-    }
-
+    // 3. Subpage links (e.g. docs/, brokers/, setup-guide/)
     if (isCurrentPage(target)) {
       e.preventDefault()
       window.scrollTo({ top: 0, behavior: 'smooth' })

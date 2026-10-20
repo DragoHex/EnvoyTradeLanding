@@ -33,9 +33,9 @@ export function isHomePage(): boolean {
   const path = window.location.pathname.replace(/\/+$/, '')
   if (window.location.hostname.endsWith('github.io')) {
     const parts = path.split('/').filter(Boolean)
-    return parts.length <= 1 // root or /EnvoyTradeLanding
+    return parts.length <= 1 || (parts.length === 2 && parts[1] === 'index.html')
   }
-  return path === '' || path === '/index.html'
+  return path === '' || path === '/index.html' || path.endsWith('/index.html')
 }
 
 /**
@@ -57,7 +57,7 @@ export function isCurrentPage(target: string): boolean {
   }
 
   // Target is a subpage (e.g. 'docs', 'brokers', 'setup-guide')
-  return path.endsWith('/' + clean) || path === '/' + clean
+  return path.endsWith('/' + clean) || path === '/' + clean || path.endsWith('/' + clean + '/index.html')
 }
 
 /**

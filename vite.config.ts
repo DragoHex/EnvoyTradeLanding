@@ -18,7 +18,14 @@ export default defineConfig({
       configureServer(server) {
         server.middlewares.use((req, _res, next) => {
           if (req.url) {
-            const pathname = req.url.split('?')[0].replace(/\/+$/, '')
+            let pathname = req.url.split('?')[0].replace(/\/+$/, '')
+            if (pathname === '/EnvoyTradeLanding') {
+              req.url = '/index.html'
+              return next()
+            }
+            if (pathname.startsWith('/EnvoyTradeLanding/')) {
+              pathname = pathname.replace('/EnvoyTradeLanding', '')
+            }
             const pages = [
               'brokers',
               'docs',
@@ -42,7 +49,14 @@ export default defineConfig({
       configurePreviewServer(server) {
         server.middlewares.use((req, _res, next) => {
           if (req.url) {
-            const pathname = req.url.split('?')[0].replace(/\/+$/, '')
+            let pathname = req.url.split('?')[0].replace(/\/+$/, '')
+            if (pathname === '/EnvoyTradeLanding') {
+              req.url = '/index.html'
+              return next()
+            }
+            if (pathname.startsWith('/EnvoyTradeLanding/')) {
+              pathname = pathname.replace('/EnvoyTradeLanding', '')
+            }
             const pages = [
               'brokers',
               'docs',

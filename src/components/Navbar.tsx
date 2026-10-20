@@ -2,7 +2,7 @@ import { createSignal } from 'solid-js'
 import { EnvoyLogo } from './EnvoyLogo'
 import { ThemeToggle } from './ThemeToggle'
 import { useTheme } from '../context/theme'
-import { SITE_CONFIG, getRelativePath, isHomePage, isCurrentPage } from '../config/site'
+import { SITE_CONFIG, getRelativePath, isCurrentPage } from '../config/site'
 
 export interface NavbarProps {
   isSubpage?: boolean
@@ -14,9 +14,28 @@ export function Navbar(props: NavbarProps) {
   const { isDark, toggleTheme } = useTheme()
 
   const handleLinkClick = (e: MouseEvent, target: string) => {
-    const isHome = isHomePage()
+    const isHome = !isSub()
 
-    // 1. Anchor targets (e.g. #features, #how, #pricing, #faq, #contact-support)
+    // 1. Logo / Home link
+    if (target === '') {
+      if (isHome) {
+        // Already on home page: smooth scroll to top, zero reload
+        e.preventDefault()
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+        try {
+          history.replaceState(null, '', window.location.pathname)
+        } catch {}
+        setMobileMenuOpen(false)
+        return
+      }
+      // On a subpage: navigate cleanly back to home page
+      e.preventDefault()
+      setMobileMenuOpen(false)
+      window.location.href = getRelativePath('', true)
+      return
+    }
+
+    // 2. Anchor targets on home page (e.g. #features, #how, #pricing, #faq, #contact-support)
     if (target.startsWith('#')) {
       if (isHome) {
         // Already on home page: smooth scroll to element without page reload
@@ -32,22 +51,11 @@ export function Navbar(props: NavbarProps) {
         setMobileMenuOpen(false)
         return
       }
-      // On another page: let the browser navigate normally to the home page URL with anchor
+      // On another page: navigate cleanly to the home page URL with anchor
+      e.preventDefault()
       setMobileMenuOpen(false)
+      window.location.href = getRelativePath(target, true)
       return
-    }
-
-    // 2. Logo / Home link
-    if (target === '') {
-      if (isHome) {
-        e.preventDefault()
-        window.scrollTo({ top: 0, behavior: 'smooth' })
-        try {
-          history.replaceState(null, '', window.location.pathname)
-        } catch {}
-        setMobileMenuOpen(false)
-        return
-      }
     }
 
     // 3. Subpage links (e.g. docs/, brokers/)
