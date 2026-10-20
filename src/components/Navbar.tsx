@@ -104,6 +104,8 @@ export function Navbar(props: NavbarProps) {
           <ThemeToggle dark={isDark()} onToggle={toggleTheme} />
           <a
             href={SITE_CONFIG.loginUrl}
+            target="_blank"
+            rel="noopener noreferrer"
             class="inline-flex items-center justify-center bg-brand-accent hover:bg-brand-accent-hover text-brand-dark font-semibold px-4 py-2 rounded-lg text-sm shadow-sm hover:shadow-brand-accent/20 hover:shadow-md transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent"
           >
             Sign In
@@ -115,6 +117,8 @@ export function Navbar(props: NavbarProps) {
           <ThemeToggle dark={isDark()} onToggle={toggleTheme} />
           <a
             href={SITE_CONFIG.loginUrl}
+            target="_blank"
+            rel="noopener noreferrer"
             class="bg-brand-accent hover:bg-brand-accent-hover text-brand-dark font-semibold px-3 py-1.5 rounded-md text-xs transition"
           >
             Sign In
@@ -154,6 +158,8 @@ export function Navbar(props: NavbarProps) {
         <div class="pt-4 border-t border-brand-border">
           <a
             href={SITE_CONFIG.loginUrl}
+            target="_blank"
+            rel="noopener noreferrer"
             class="w-full flex items-center justify-center bg-brand-accent hover:bg-brand-accent-hover text-brand-dark font-semibold px-4 py-2.5 rounded-lg text-sm"
           >
             Sign In to Dashboard
