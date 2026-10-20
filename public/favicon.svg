@@ -2,14 +2,14 @@
   <style>
     .master-stroke { stroke: #04b488; }
     .master-fill { fill: #04b488; }
-    .follower-stroke { stroke: #1a1c24; }
-    .follower-fill { fill: #1a1c24; }
+    .follower-stroke { stroke: #000000; }
+    .follower-fill { fill: #000000; }
 
     @media (prefers-color-scheme: dark) {
       .master-stroke { stroke: #06d896; }
       .master-fill { fill: #06d896; }
-      .follower-stroke { stroke: #f0f0f2; }
-      .follower-fill { fill: #f0f0f2; }
+      .follower-stroke { stroke: #ffffff; }
+      .follower-fill { fill: #ffffff; }
     }
   </style>
 

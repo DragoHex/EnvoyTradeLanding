@@ -11,6 +11,7 @@
   --color-text-rgb: 240 240 242;        /* #f0f0f2 off-white */
   --color-muted-rgb: 157 163 174;       /* #9da3ae */
   --color-heading: #ffffff;
+  --color-logo-secondary: #ffffff;
   --glass-bg: rgba(26, 28, 36, 0.7);
   --glass-border: rgba(42, 44, 52, 0.8);
 }
@@ -23,6 +24,7 @@
   --color-text-rgb: 68 71 91;           /* #44475b slate */
   --color-muted-rgb: 100 116 139;       /* #64748b */
   --color-heading: #1e2029;             /* dark slate for headings */
+  --color-logo-secondary: #000000;
   --glass-bg: rgba(255, 255, 255, 0.85);
   --glass-border: rgba(226, 228, 234, 0.85);
 }
