@@ -1,8 +1,13 @@
+/// <reference types="vitest" />
 import { defineConfig } from 'vite'
 import solid from 'vite-plugin-solid'
 import { resolve } from 'path'
 
 export default defineConfig({
+  test: {
+    environment: 'happy-dom',
+    globals: true,
+  },
   server: {
     port: 5174,
     host: '0.0.0.0',
