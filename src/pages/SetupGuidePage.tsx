@@ -1,4 +1,4 @@
-import { createSignal, Show, For } from 'solid-js'
+import { createSignal, onMount, onCleanup, Show, For } from 'solid-js'
 import { SITE_CONFIG } from '../config/site'
 import { WhatsAppIcon } from '../components/WhatsAppIcon'
 import {
@@ -19,67 +19,149 @@ interface BrokerConfig {
   logo: (size?: number) => any
 }
 
+export const BROKERS: BrokerConfig[] = [
+  {
+    id: 'kite',
+    name: 'Zerodha Kite',
+    status: 'live',
+    statusLabel: 'Live',
+    logo: (size) => <KiteLogo size={size ?? 20} />,
+  },
+  {
+    id: 'dhan',
+    name: 'Dhan',
+    status: 'live',
+    statusLabel: 'Live',
+    logo: (size) => <DhanLogo size={size ?? 20} />,
+  },
+  {
+    id: 'angelone',
+    name: 'Angel One',
+    status: 'upcoming',
+    statusLabel: 'Coming Soon',
+    logo: (size) => <AngelOneLogo size={size ?? 20} />,
+  },
+  {
+    id: 'fyers',
+    name: 'FYERS',
+    status: 'upcoming',
+    statusLabel: 'Coming Soon',
+    logo: (size) => <FyersLogo size={size ?? 18} />,
+  },
+  {
+    id: 'upstox',
+    name: 'Upstox',
+    status: 'upcoming',
+    statusLabel: 'Coming Soon',
+    logo: (size) => <UpstoxLogo size={size ?? 20} />,
+  },
+  {
+    id: 'groww',
+    name: 'Groww',
+    status: 'upcoming',
+    statusLabel: 'Coming Soon',
+    logo: (size) => <GrowwLogo size={size ?? 20} />,
+  },
+  {
+    id: 'kotak',
+    name: 'Kotak Neo',
+    status: 'upcoming',
+    statusLabel: 'Coming Soon',
+    logo: (size) => <KotakNeoLogo size={size ?? 20} />,
+  },
+]
+
+export const STORAGE_KEY_SETUP_GUIDE_BROKER = 'envoytrade_setup_guide_broker'
+const DEFAULT_BROKER = 'kite'
+
+function isValidBroker(id: string | null | undefined): boolean {
+  if (!id) return false
+  return BROKERS.some((b) => b.id.toLowerCase() === id.toLowerCase())
+}
+
+function getInitialBroker(): string {
+  if (typeof window === 'undefined') return DEFAULT_BROKER
+
+  // 1. URL search param (e.g. ?broker=dhan)
+  try {
+    const params = new URLSearchParams(window.location.search)
+    const param = params.get('broker')
+    if (isValidBroker(param)) {
+      return param!.toLowerCase()
+    }
+  } catch {}
+
+  // 2. URL hash fallback (e.g. #dhan or #broker=dhan)
+  try {
+    const hash = window.location.hash.replace(/^#/, '').trim()
+    const cleanHash = hash.startsWith('broker=') ? hash.replace('broker=', '') : hash
+    if (isValidBroker(cleanHash)) {
+      return cleanHash.toLowerCase()
+    }
+  } catch {}
+
+  // 3. localStorage (persists across refresh and page visits)
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY_SETUP_GUIDE_BROKER)
+    if (isValidBroker(stored)) {
+      return stored!.toLowerCase()
+    }
+  } catch {}
+
+  return DEFAULT_BROKER
+}
+
+function persistBroker(brokerId: string) {
+  if (typeof window === 'undefined') return
+
+  try {
+    localStorage.setItem(STORAGE_KEY_SETUP_GUIDE_BROKER, brokerId)
+  } catch {}
+
+  try {
+    const url = new URL(window.location.href)
+    if (url.searchParams.get('broker') !== brokerId) {
+      url.searchParams.set('broker', brokerId)
+      window.history.replaceState(null, '', url.toString())
+    }
+  } catch {}
+}
+
 export function SetupGuidePage() {
-  const [selectedBroker, setSelectedBroker] = createSignal<string>('kite')
+  const [selectedBroker, setSelectedBroker] = createSignal<string>(getInitialBroker())
   const [copiedUrl, setCopiedUrl] = createSignal<string | null>(null)
+
+  const handleSelectBroker = (brokerId: string) => {
+    setSelectedBroker(brokerId)
+    persistBroker(brokerId)
+  }
+
+  onMount(() => {
+    // Ensure URL and localStorage reflect active broker on initial mount
+    const current = selectedBroker()
+    persistBroker(current)
+
+    const handlePopState = () => {
+      const broker = getInitialBroker()
+      if (broker !== selectedBroker()) {
+        setSelectedBroker(broker)
+      }
+    }
+
+    window.addEventListener('popstate', handlePopState)
+    window.addEventListener('hashchange', handlePopState)
+
+    onCleanup(() => {
+      window.removeEventListener('popstate', handlePopState)
+      window.removeEventListener('hashchange', handlePopState)
+    })
+  })
 
   const handleCopy = (url: string) => {
     navigator.clipboard.writeText(url)
     setCopiedUrl(url)
     setTimeout(() => setCopiedUrl(null), 2000)
   }
-
-  const BROKERS: BrokerConfig[] = [
-    {
-      id: 'kite',
-      name: 'Zerodha Kite',
-      status: 'live',
-      statusLabel: 'Live',
-      logo: (size) => <KiteLogo size={size ?? 20} />,
-    },
-    {
-      id: 'dhan',
-      name: 'Dhan',
-      status: 'live',
-      statusLabel: 'Live',
-      logo: (size) => <DhanLogo size={size ?? 20} />,
-    },
-    {
-      id: 'angelone',
-      name: 'Angel One',
-      status: 'upcoming',
-      statusLabel: 'Coming Soon',
-      logo: (size) => <AngelOneLogo size={size ?? 20} />,
-    },
-    {
-      id: 'fyers',
-      name: 'FYERS',
-      status: 'upcoming',
-      statusLabel: 'Coming Soon',
-      logo: (size) => <FyersLogo size={size ?? 18} />,
-    },
-    {
-      id: 'upstox',
-      name: 'Upstox',
-      status: 'upcoming',
-      statusLabel: 'Coming Soon',
-      logo: (size) => <UpstoxLogo size={size ?? 20} />,
-    },
-    {
-      id: 'groww',
-      name: 'Groww',
-      status: 'upcoming',
-      statusLabel: 'Coming Soon',
-      logo: (size) => <GrowwLogo size={size ?? 20} />,
-    },
-    {
-      id: 'kotak',
-      name: 'Kotak Neo',
-      status: 'upcoming',
-      statusLabel: 'Coming Soon',
-      logo: (size) => <KotakNeoLogo size={size ?? 20} />,
-    },
-  ]
 
   const kiteSteps = [
     {
@@ -433,7 +515,7 @@ export function SetupGuidePage() {
               return (
                 <button
                   type="button"
-                  onClick={() => setSelectedBroker(broker.id)}
+                  onClick={() => handleSelectBroker(broker.id)}
                   class={`flex items-center gap-2.5 px-4 py-2.5 rounded-xl border text-sm font-semibold transition cursor-pointer ${
                     isSelected()
                       ? 'bg-brand-surface border-brand-accent text-white shadow-md shadow-brand-accent/5 ring-1 ring-brand-accent/40'

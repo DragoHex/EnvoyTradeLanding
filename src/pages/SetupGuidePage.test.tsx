@@ -1,13 +1,19 @@
-import { describe, it, expect, beforeEach } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import { render } from 'solid-js/web'
-import { SetupGuidePage } from './SetupGuidePage'
+import { SetupGuidePage, STORAGE_KEY_SETUP_GUIDE_BROKER } from './SetupGuidePage'
 
 describe('SetupGuidePage', () => {
   let container: HTMLDivElement
 
   beforeEach(() => {
+    localStorage.clear()
+    window.history.replaceState(null, '', '/setup-guide/')
     container = document.createElement('div')
     document.body.appendChild(container)
+  })
+
+  afterEach(() => {
+    document.body.innerHTML = ''
   })
 
   it('renders top level description without step numbers', () => {
@@ -64,5 +70,54 @@ describe('SetupGuidePage', () => {
     expect(container.textContent).not.toContain('Request Early Access')
     expect(container.textContent).not.toContain('View Zerodha Guide')
     expect(container.textContent).not.toContain('View Dhan Guide')
+  })
+
+  it('persists selected broker to localStorage and URL query param when clicked', () => {
+    render(() => <SetupGuidePage />, container)
+
+    const buttons = Array.from(container.querySelectorAll('button'))
+    const dhanBtn = buttons.find((b) => b.textContent?.includes('Dhan'))
+    dhanBtn?.click()
+
+    expect(localStorage.getItem(STORAGE_KEY_SETUP_GUIDE_BROKER)).toBe('dhan')
+    expect(window.location.search).toContain('broker=dhan')
+  })
+
+  it('persists and restores selected broker from localStorage on page load (refresh scenario)', () => {
+    localStorage.setItem(STORAGE_KEY_SETUP_GUIDE_BROKER, 'dhan')
+
+    render(() => <SetupGuidePage />, container)
+
+    expect(container.textContent).toContain('web.dhan.co')
+    expect(container.textContent).toContain('DhanHQ Trading APIs')
+    expect(window.location.search).toContain('broker=dhan')
+  })
+
+  it('persists and restores selected broker from URL search query on page load', () => {
+    window.history.replaceState(null, '', '/setup-guide/?broker=dhan')
+
+    render(() => <SetupGuidePage />, container)
+
+    expect(container.textContent).toContain('web.dhan.co')
+    expect(localStorage.getItem(STORAGE_KEY_SETUP_GUIDE_BROKER)).toBe('dhan')
+  })
+
+  it('persists and restores selected broker from URL hash on page load', () => {
+    window.history.replaceState(null, '', '/setup-guide/#angelone')
+
+    render(() => <SetupGuidePage />, container)
+
+    expect(container.textContent).toContain('Angel One Setup Guide')
+    expect(container.textContent).toContain('Coming Soon')
+    expect(localStorage.getItem(STORAGE_KEY_SETUP_GUIDE_BROKER)).toBe('angelone')
+  })
+
+  it('safely falls back to Zerodha Kite when an unknown broker is in localStorage or URL', () => {
+    localStorage.setItem(STORAGE_KEY_SETUP_GUIDE_BROKER, 'unknown_broker')
+    window.history.replaceState(null, '', '/setup-guide/?broker=invalid')
+
+    render(() => <SetupGuidePage />, container)
+
+    expect(container.textContent).toContain('developers.kite.trade')
   })
 })
