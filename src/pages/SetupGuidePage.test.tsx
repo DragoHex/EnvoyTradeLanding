@@ -47,12 +47,23 @@ describe('SetupGuidePage', () => {
     
     dhanBtn?.click()
 
+    expect(container.textContent).toContain('Initiate Account Creation & Obtain Static IP')
+    expect(container.textContent).toContain('Whitelist Static IP & Generate Dhan Access Token')
+    expect(container.textContent).toContain('Complete Account Registration in EnvoyTrade Dashboard')
     expect(container.textContent).toContain('web.dhan.co')
     expect(container.textContent).toContain('DhanHQ Trading APIs')
     expect(container.textContent).toContain('Free Tier: Trading APIs')
     expect(container.textContent).toContain('Generate Access Token/API Key')
     expect(container.textContent).toContain('https://mime.envoytrade.in/broker-callback')
     expect(container.textContent).toContain('Daily Automated Session Renewal')
+
+    // Verify chronological order of steps
+    const text = container.textContent || ''
+    const idxStep1 = text.indexOf('Initiate Account Creation')
+    const idxStep2 = text.indexOf('Whitelist Static IP & Generate')
+    const idxStep3 = text.indexOf('Complete Account Registration')
+    expect(idxStep1).toBeLessThan(idxStep2)
+    expect(idxStep2).toBeLessThan(idxStep3)
   })
 
   it('renders theme-matched Coming Soon view when an unreleased broker tab is clicked', () => {
