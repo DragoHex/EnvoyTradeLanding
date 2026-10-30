@@ -321,12 +321,47 @@ export function SetupGuidePage() {
   const dhanSteps = [
     {
       step: '01',
-      title: 'Enable DhanHQ Trading APIs & Generate Access Token/API Key',
+      title: 'Initiate Account Creation & Obtain Static IP',
       badge: 'Prerequisite',
       content: (
         <div class="space-y-4 text-sm text-brand-muted leading-relaxed">
           <p>
-            Dhan provides direct developer access through the DhanHQ API portal. Configure your API key to connect your Dhan account:
+            Start the connection in your EnvoyTrade Dashboard to retrieve your account's dedicated static egress IP:
+          </p>
+          <div class="p-4 rounded-xl bg-brand-dark border border-brand-border space-y-3 text-xs">
+            <div class="flex items-center justify-between mb-1">
+              <span class="font-bold text-white text-sm">EnvoyTrade Dashboard</span>
+              <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-brand-accent/10 text-brand-accent border border-brand-accent/25">Step 1</span>
+            </div>
+            <ol class="list-decimal list-inside space-y-2 text-brand-light">
+              <li>
+                Log in to <a href={SITE_CONFIG.loginUrl} target="_blank" rel="noopener noreferrer" class="text-brand-accent hover:underline font-mono">mime.envoytrade.in</a> and navigate to <strong>Accounts</strong>.
+              </li>
+              <li>
+                Click <strong>"Add Account"</strong> to open the account configuration window.
+              </li>
+              <li>
+                Select Broker as <strong class="text-brand-accent">Dhan</strong> and choose the account Role (<strong>Master</strong> or <strong>Follower</strong>).
+              </li>
+              <li>
+                Under <strong>IP Address</strong>, locate and copy the allocated <code class="text-brand-accent font-mono">Dedicated Static Proxy IP</code> displayed in the selection window.
+              </li>
+              <li class="text-brand-accent">
+                <strong>Keep this creation window open</strong> while you configure settings in Dhan.
+              </li>
+            </ol>
+          </div>
+        </div>
+      ),
+    },
+    {
+      step: '02',
+      title: 'Whitelist Static IP & Generate Dhan Access Token',
+      badge: 'Broker Compliance',
+      content: (
+        <div class="space-y-4 text-sm text-brand-muted leading-relaxed">
+          <p>
+            Log in to the DhanHQ API portal to whitelist your static IP and create your access credentials:
           </p>
           <div class="p-4 rounded-xl bg-brand-dark border border-brand-border space-y-3 text-xs">
             <div class="flex items-center justify-between mb-1">
@@ -344,7 +379,10 @@ export function SetupGuidePage() {
                 Enable <strong>"Free Tier: Trading APIs"</strong> if not already enabled.
               </li>
               <li>
-                On the same page, click on <strong>"Generate Access Token/API Key"</strong>.
+                Under the IP whitelist settings, enter the dedicated static IP copied from Step 1.
+              </li>
+              <li>
+                Click on <strong>"Generate Access Token/API Key"</strong>.
               </li>
               <li>
                 Set Application Name to <code class="text-brand-accent">EnvoyTrade Copier</code>.
@@ -361,7 +399,7 @@ export function SetupGuidePage() {
                 </button>
               </li>
               <li>
-                Once generated, securely copy and save your Access Token / API Key.
+                Generate and securely copy the new Access Token / API Key.
               </li>
             </ol>
           </div>
@@ -369,34 +407,22 @@ export function SetupGuidePage() {
       ),
     },
     {
-      step: '02',
-      title: 'Whitelist Dedicated Static Egress IP',
-      badge: 'Broker Compliance',
-      content: (
-        <div class="space-y-4 text-sm text-brand-muted leading-relaxed">
-          <p>
-            EnvoyTrade routes all order requests through a <strong>dedicated static proxy IP</strong> allocated to your account, ensuring compliance with institutional security and broker API safeguards.
-          </p>
-          <div class="p-4 rounded-xl bg-brand-dark border border-brand-border space-y-2 text-xs">
-            <ol class="list-decimal list-inside space-y-1.5 text-brand-light">
-              <li>Open your <strong>EnvoyTrade Dashboard &rarr; Accounts</strong> page.</li>
-              <li>Select your Dhan account to view the allocated <code class="text-brand-accent">Dedicated Static Proxy IP</code>.</li>
-              <li>In your DhanHQ API settings, enter this IP under the allowed egress/whitelist settings if prompted.</li>
-              <li>All copy-trade signals egress exclusively through this verified static IP address.</li>
-            </ol>
-          </div>
-        </div>
-      ),
-    },
-    {
       step: '03',
-      title: 'Add Dhan Accounts to EnvoyTrade Dashboard',
+      title: 'Complete Account Registration in EnvoyTrade Dashboard',
       badge: 'Account Management',
       content: (
         <div class="space-y-4 text-sm text-brand-muted leading-relaxed">
           <p>
-            Log in to the dashboard at <a href={SITE_CONFIG.loginUrl} target="_blank" rel="noopener noreferrer" class="text-brand-accent hover:underline">mime.envoytrade.in</a> to register your Dhan accounts:
+            Switch back to the open EnvoyTrade window to finalize your account registration:
           </p>
+          <div class="p-4 rounded-xl bg-brand-dark border border-brand-border space-y-3 text-xs mb-4">
+            <ol class="list-decimal list-inside space-y-2 text-brand-light">
+              <li>Return to the open <strong>Add Account</strong> window in your EnvoyTrade Dashboard.</li>
+              <li>Enter your <strong>Dhan Client ID</strong> (found in your Dhan profile, e.g. <code class="text-brand-light font-mono">1000000001</code>).</li>
+              <li>Paste the generated <strong>Access Token</strong> into the Access Token field.</li>
+              <li>Click <strong>Save Account</strong> to verify credentials and complete the connection.</li>
+            </ol>
+          </div>
           <div class="grid sm:grid-cols-2 gap-4 text-xs">
             <div class="p-4 rounded-xl bg-brand-dark border border-brand-border">
               <h4 class="font-bold text-white text-sm mb-2">Master Dhan Account</h4>
@@ -404,8 +430,8 @@ export function SetupGuidePage() {
               <ul class="space-y-1 text-brand-light">
                 <li>&bull; Broker: <strong class="text-brand-accent">Dhan</strong></li>
                 <li>&bull; Role: <strong class="text-brand-accent">Master</strong></li>
-                <li>&bull; Dhan Client ID (e.g. <code class="text-brand-light">1000000001</code>)</li>
-                <li>&bull; Generated Access Token / API Key</li>
+                <li>&bull; Dhan Client ID</li>
+                <li>&bull; Generated Access Token</li>
               </ul>
             </div>
             <div class="p-4 rounded-xl bg-brand-dark border border-brand-border">
@@ -413,7 +439,7 @@ export function SetupGuidePage() {
               <p class="text-brand-muted mb-2">Accounts that automatically replicate trades in real time.</p>
               <ul class="space-y-1 text-brand-light">
                 <li>&bull; Role: <strong class="text-sky-400">Follower</strong></li>
-                <li>&bull; Generated Access Token / API Key</li>
+                <li>&bull; Generated Access Token</li>
                 <li>&bull; Assigned dedicated Proxy IP (IPv4 / IPv6)</li>
                 <li>&bull; Assigned Copy Group & Sizing Multiplier (e.g. 1.0x, 2.0x)</li>
               </ul>
