@@ -320,11 +320,12 @@ export function DocsPage() {
                   <h4 class="font-bold text-white mb-2">Supported Indian Brokers</h4>
                   <ul class="space-y-1.5 text-brand-muted">
                     <li>&bull; <strong class="text-white">Zerodha Kite Connect</strong> (Live Integration)</li>
+                    <li>&bull; <strong class="text-white">Dhan HQ</strong> (Live Integration)</li>
+                    <li>&bull; <strong class="text-white">Kotak Neo</strong> (Live Integration)</li>
                     <li>&bull; <strong class="text-white">Angel One SmartAPI</strong> (Integration Ready)</li>
                     <li>&bull; <strong class="text-white">FYERS API v3</strong> (Integration Ready)</li>
-                    <li>&bull; <strong class="text-white">Dhan HQ</strong> (Integration Ready)</li>
                     <li>&bull; <strong class="text-white">Upstox Developer API</strong> (Integration Ready)</li>
-                    <li>&bull; <strong class="text-white">Kotak Neo & Groww</strong> (Integration Ready)</li>
+                    <li>&bull; <strong class="text-white">Groww</strong> (Integration Ready)</li>
                   </ul>
                 </div>
                 <div class="p-4 rounded-xl bg-brand-surface border border-brand-border">

@@ -32,6 +32,20 @@ export function BrokersModal(props: BrokersModalProps) {
       logo: () => <KiteLogo size={22} />,
     },
     {
+      id: 'dhan',
+      name: 'Dhan',
+      status: 'Live & Active',
+      statusClass: 'text-brand-accent bg-brand-accent/10 border-brand-accent/30',
+      logo: () => <DhanLogo size={22} />,
+    },
+    {
+      id: 'kotak',
+      name: 'Kotak Neo',
+      status: 'Live & Active',
+      statusClass: 'text-brand-accent bg-brand-accent/10 border-brand-accent/30',
+      logo: () => <KotakNeoLogo size={22} />,
+    },
+    {
       id: 'angelone',
       name: 'Angel One',
       status: 'Integration Ready',
@@ -46,13 +60,6 @@ export function BrokersModal(props: BrokersModalProps) {
       logo: () => <FyersLogo size={22} />,
     },
     {
-      id: 'dhan',
-      name: 'Dhan',
-      status: 'Integration Ready',
-      statusClass: 'text-sky-400 bg-sky-500/10 border-sky-500/30',
-      logo: () => <DhanLogo size={22} />,
-    },
-    {
       id: 'upstox',
       name: 'Upstox',
       status: 'Integration Ready',
@@ -65,13 +72,6 @@ export function BrokersModal(props: BrokersModalProps) {
       status: 'Integration Ready',
       statusClass: 'text-sky-400 bg-sky-500/10 border-sky-500/30',
       logo: () => <GrowwLogo size={22} />,
-    },
-    {
-      id: 'kotak',
-      name: 'Kotak Neo',
-      status: 'Integration Ready',
-      statusClass: 'text-sky-400 bg-sky-500/10 border-sky-500/30',
-      logo: () => <KotakNeoLogo size={22} />,
     },
   ]
 
