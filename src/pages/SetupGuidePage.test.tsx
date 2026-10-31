@@ -66,6 +66,46 @@ describe('SetupGuidePage', () => {
     expect(idxStep2).toBeLessThan(idxStep3)
   })
 
+  it('renders Kotak Neo setup guide when Kotak Neo tab is clicked', () => {
+    render(() => <SetupGuidePage />, container)
+
+    // Find Kotak Neo button in selector
+    const buttons = Array.from(container.querySelectorAll('button'))
+    const kotakBtn = buttons.find((b) => b.textContent?.includes('Kotak Neo'))
+    expect(kotakBtn).toBeDefined()
+
+    kotakBtn?.click()
+
+    expect(container.textContent).toContain('Create Developer App & Obtain API Credentials')
+    expect(container.textContent).toContain('Whitelist Dedicated Static Egress IP')
+    expect(container.textContent).toContain('Add Accounts to EnvoyTrade Dashboard')
+    expect(container.textContent).toContain('Configure Copy Groups & Sizing Multipliers')
+    expect(container.textContent).toContain('Execute a Test Trade & Live Verification')
+    expect(container.textContent).toContain('Daily Automated Session Renewal')
+    expect(container.textContent).toContain('trade.kotakneo.com/login')
+    expect(container.textContent).toContain('Consumer Key')
+    expect(container.textContent).toContain('IPv4 / IPv6')
+    expect(container.textContent).toContain('copy the Base32 TOTP secret key')
+    expect(container.textContent).toContain('Kotak Neo Client ID (UCC)')
+    expect(container.textContent).not.toContain('V45IC')
+    expect(container.textContent).not.toContain('100008')
+    expect(container.textContent).not.toContain('tradeapi.kotaksecurities.com')
+
+    // Verify chronological order of steps
+    const text = container.textContent || ''
+    const idxStep1 = text.indexOf('Create Developer App & Obtain API Credentials')
+    const idxStep2 = text.indexOf('Whitelist Dedicated Static Egress IP')
+    const idxStep3 = text.indexOf('Add Accounts to EnvoyTrade Dashboard')
+    const idxStep4 = text.indexOf('Configure Copy Groups & Sizing Multipliers')
+    const idxStep5 = text.indexOf('Execute a Test Trade & Live Verification')
+    const idxStep6 = text.indexOf('Daily Automated Session Renewal')
+    expect(idxStep1).toBeLessThan(idxStep2)
+    expect(idxStep2).toBeLessThan(idxStep3)
+    expect(idxStep3).toBeLessThan(idxStep4)
+    expect(idxStep4).toBeLessThan(idxStep5)
+    expect(idxStep5).toBeLessThan(idxStep6)
+  })
+
   it('renders theme-matched Coming Soon view when an unreleased broker tab is clicked', () => {
     render(() => <SetupGuidePage />, container)
 
@@ -111,6 +151,16 @@ describe('SetupGuidePage', () => {
 
     expect(container.textContent).toContain('web.dhan.co')
     expect(localStorage.getItem(STORAGE_KEY_SETUP_GUIDE_BROKER)).toBe('dhan')
+  })
+
+  it('persists and restores Kotak Neo from URL search query on page load', () => {
+    window.history.replaceState(null, '', '/setup-guide/?broker=kotak')
+
+    render(() => <SetupGuidePage />, container)
+
+    expect(container.textContent).toContain('trade.kotakneo.com/login')
+    expect(container.textContent).toContain('Consumer Key')
+    expect(localStorage.getItem(STORAGE_KEY_SETUP_GUIDE_BROKER)).toBe('kotak')
   })
 
   it('persists and restores selected broker from URL hash on page load', () => {

@@ -35,6 +35,13 @@ export const BROKERS: BrokerConfig[] = [
     logo: (size) => <DhanLogo size={size ?? 20} />,
   },
   {
+    id: 'kotak',
+    name: 'Kotak Neo',
+    status: 'live',
+    statusLabel: 'Live',
+    logo: (size) => <KotakNeoLogo size={size ?? 20} />,
+  },
+  {
     id: 'angelone',
     name: 'Angel One',
     status: 'upcoming',
@@ -61,13 +68,6 @@ export const BROKERS: BrokerConfig[] = [
     status: 'upcoming',
     statusLabel: 'Coming Soon',
     logo: (size) => <GrowwLogo size={size ?? 20} />,
-  },
-  {
-    id: 'kotak',
-    name: 'Kotak Neo',
-    status: 'upcoming',
-    statusLabel: 'Coming Soon',
-    logo: (size) => <KotakNeoLogo size={size ?? 20} />,
   },
 ]
 
@@ -512,6 +512,167 @@ export function SetupGuidePage() {
     },
   ]
 
+  const kotakSteps = [
+    {
+      step: '01',
+      title: 'Create Developer App & Obtain API Credentials',
+      badge: 'Prerequisite',
+      content: (
+        <div class="space-y-4 text-sm text-brand-muted leading-relaxed">
+          <p>
+            Each trading account (master trader and child follower) connects through its own dedicated broker application credentials.
+          </p>
+          <div class="p-4 rounded-xl bg-brand-dark border border-brand-border space-y-3 text-xs">
+            <div class="flex items-center justify-between mb-1">
+              <span class="font-bold text-white text-sm">Kotak Neo</span>
+              <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-brand-accent/10 text-brand-accent border border-brand-accent/25">Live</span>
+            </div>
+            <ol class="list-decimal list-inside space-y-2 text-brand-light">
+              <li>
+                Log in to your account at <a href="https://trade.kotakneo.com/login" target="_blank" rel="noopener noreferrer" class="text-brand-accent hover:underline font-mono">trade.kotakneo.com/login</a> to access API settings and security preferences.
+              </li>
+              <li>
+                Navigate to API settings and create a new application named <code class="text-brand-accent">EnvoyTrade Copier</code>.
+              </li>
+              <li>
+                Under Application Keys, copy and save your <code class="text-brand-accent">Consumer Key</code>.
+              </li>
+              <li>
+                Note your <strong>Kotak Neo Client ID (UCC)</strong>, registered <strong>10-digit mobile number</strong>, and 6-digit <strong>MPIN</strong>.
+              </li>
+              <li>
+                When enabling Two-Factor Authentication (2FA) with an Authenticator App, <strong>copy the Base32 TOTP secret key</strong>. You will need this secret key later when adding your account to EnvoyTrade for automated session renewal.
+              </li>
+            </ol>
+            <p class="text-[11px] text-brand-muted pt-1">
+              <em class="text-brand-light">Note:</em> Kotak Neo uses real-time order streams for execution capture. No redirect or postback callback URL is required.
+            </p>
+          </div>
+        </div>
+      ),
+    },
+    {
+      step: '02',
+      title: 'Whitelist Dedicated Static Egress IP',
+      badge: 'Broker Compliance',
+      content: (
+        <div class="space-y-4 text-sm text-brand-muted leading-relaxed">
+          <p>
+            Broker security firewalls block API calls originating from dynamic cloud IP ranges. EnvoyTrade provisions a <strong>dedicated static proxy IP (IPv4 / IPv6)</strong> for each follower account.
+          </p>
+          <div class="p-4 rounded-xl bg-brand-dark border border-brand-border space-y-2 text-xs">
+            <ol class="list-decimal list-inside space-y-1.5 text-brand-light">
+              <li>Open your <strong>EnvoyTrade Dashboard &rarr; Accounts</strong> page.</li>
+              <li>Select your account to view the allocated <code class="text-brand-accent">Dedicated Static Proxy IP (IPv4 / IPv6)</code>.</li>
+              <li>In your Kotak Neo developer console under <strong>App Settings &rarr; IP Whitelist</strong>, paste this IP address.</li>
+              <li>Save changes. All orders from EnvoyTrade will egress exclusively through this verified IP address.</li>
+            </ol>
+          </div>
+        </div>
+      ),
+    },
+    {
+      step: '03',
+      title: 'Add Accounts to EnvoyTrade Dashboard',
+      badge: 'Account Management',
+      content: (
+        <div class="space-y-4 text-sm text-brand-muted leading-relaxed">
+          <p>
+            Log in to the dashboard at <a href={SITE_CONFIG.loginUrl} target="_blank" rel="noopener noreferrer" class="text-brand-accent hover:underline">mime.envoytrade.in</a> to register your master and child trading accounts.
+          </p>
+          <div class="grid sm:grid-cols-2 gap-4 text-xs">
+            <div class="p-4 rounded-xl bg-brand-dark border border-brand-border">
+              <h4 class="font-bold text-white text-sm mb-2">Master Trading Account</h4>
+              <p class="text-brand-muted mb-2">The account where manual or algorithmic trades are placed.</p>
+              <ul class="space-y-1 text-brand-light">
+                <li>&bull; Broker: <strong class="text-brand-accent">Kotak Neo</strong></li>
+                <li>&bull; Role: <strong class="text-brand-accent">Master</strong></li>
+                <li>&bull; Kotak Neo Client ID (UCC)</li>
+                <li>&bull; Registered Mobile Number (+91)</li>
+                <li>&bull; Consumer Key</li>
+                <li>&bull; MPIN & Base32 TOTP Secret</li>
+              </ul>
+            </div>
+            <div class="p-4 rounded-xl bg-brand-dark border border-brand-border">
+              <h4 class="font-bold text-white text-sm mb-2">Follower Child Accounts</h4>
+              <p class="text-brand-muted mb-2">Accounts that automatically mirror the master's orders.</p>
+              <ul class="space-y-1 text-brand-light">
+                <li>&bull; Role: <strong class="text-sky-400">Follower</strong></li>
+                <li>&bull; Kotak Neo Client ID (UCC) & Mobile (+91)</li>
+                <li>&bull; Consumer Key, MPIN & TOTP Secret</li>
+                <li>&bull; Assigned dedicated Proxy IP (IPv4 / IPv6)</li>
+                <li>&bull; Assigned Copy Group</li>
+                <li>&bull; Sizing Multiplier (e.g. 1.0x, 2.0x, 0.5x)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      ),
+    },
+    {
+      step: '04',
+      title: 'Configure Copy Groups & Sizing Multipliers',
+      badge: 'Risk & Allocation',
+      content: (
+        <div class="space-y-4 text-sm text-brand-muted leading-relaxed">
+          <p>
+            Groups allow you to organize followers and dictate how order quantities scale:
+          </p>
+          <div class="p-4 rounded-xl bg-brand-dark border border-brand-border space-y-3 text-xs">
+            <div class="flex items-start gap-3">
+              <div class="w-2 h-2 rounded-full bg-brand-accent mt-1.5 shrink-0" />
+              <div>
+                <strong class="text-white block">Lot Size Flooring Rule:</strong>
+                <span class="text-brand-muted">
+                  Derivative orders are always floored to exact contract lot multiples (resolved live from official exchange master instrument tables). A 0.5x multiplier on a 1-lot order never places an invalid fractional order. Cash equities are automatically formatted to the appropriate exchange series.
+                </span>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <div class="w-2 h-2 rounded-full bg-brand-accent mt-1.5 shrink-0" />
+              <div>
+                <strong class="text-white block">Per-Order Quantity Cap:</strong>
+                <span class="text-brand-muted">
+                  Set a hard cap (e.g. 1,800 qty for Nifty / Bank Nifty) to prevent unexpected over-allocation in case of fat-finger errors on the master.
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      ),
+    },
+    {
+      step: '05',
+      title: 'Execute a Test Trade & Live Verification',
+      badge: 'Go-Live Verification',
+      content: (
+        <div class="space-y-4 text-sm text-brand-muted leading-relaxed">
+          <p>
+            Verify the pipeline before trading live capital:
+          </p>
+          <div class="p-4 rounded-xl bg-brand-dark border border-brand-border space-y-2 text-xs">
+            <p>1. Place a 1-share or 1-lot order on the master Kotak Neo account.</p>
+            <p>2. Watch the EnvoyTrade real-time dashboard activity feed: observe master fill &rarr; fan-out dispatched &rarr; child order confirmed.</p>
+            <p>3. Check the follower trading terminal to confirm order execution with tag <code class="text-brand-accent">ET-[hash]</code>.</p>
+            <p>4. Verify the recorded latency timestamp in the dashboard audit log (&lt; 100ms).</p>
+          </div>
+        </div>
+      ),
+    },
+    {
+      step: '06',
+      title: 'Daily Automated Session Renewal',
+      badge: 'Hands-Free Operation',
+      content: (
+        <div class="space-y-4 text-sm text-brand-muted leading-relaxed">
+          <p>
+            Indian broker API access tokens are mandated by SEBI to expire within 24 hours (resetting daily at 6:00 AM IST). EnvoyTrade eliminates manual morning logins with automated daily session renewal.
+          </p>
+        </div>
+      ),
+    },
+  ]
+
   const activeBroker = () => BROKERS.find((b) => b.id === selectedBroker()) ?? BROKERS[0]
 
   return (
@@ -617,8 +778,33 @@ export function SetupGuidePage() {
         </div>
       </Show>
 
+      <Show when={selectedBroker() === 'kotak'}>
+        <div class="space-y-8">
+          <For each={kotakSteps}>
+            {(s) => (
+              <section class="bg-brand-surface border border-brand-border rounded-2xl p-6 sm:p-8 relative overflow-hidden glass-card-hover">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 pb-4 border-b border-brand-border/60">
+                  <div class="flex items-center gap-3.5">
+                    <span class="w-9 h-9 rounded-xl bg-brand-accent/10 border border-brand-accent/30 text-brand-accent font-mono font-bold flex items-center justify-center text-sm shrink-0">
+                      {s.step}
+                    </span>
+                    <h2 class="text-xl sm:text-2xl font-bold text-white tracking-tight">
+                      {s.title}
+                    </h2>
+                  </div>
+                  <span class="self-start sm:self-center text-xs font-semibold px-2.5 py-1 rounded-full bg-brand-dark border border-brand-border text-brand-light">
+                    {s.badge}
+                  </span>
+                </div>
+                {s.content}
+              </section>
+            )}
+          </For>
+        </div>
+      </Show>
+
       {/* Theme-Matched Coming Soon Card for Other Brokers */}
-      <Show when={selectedBroker() !== 'kite' && selectedBroker() !== 'dhan'}>
+      <Show when={selectedBroker() !== 'kite' && selectedBroker() !== 'dhan' && selectedBroker() !== 'kotak'}>
         <div class="bg-brand-surface border border-brand-border rounded-2xl p-8 sm:p-12 relative overflow-hidden glass-card text-center">
           <div class="max-w-2xl mx-auto space-y-6">
             <div class="w-16 h-16 rounded-2xl bg-brand-dark/50 border border-brand-border flex items-center justify-center mx-auto shadow-md">
